@@ -1,4 +1,4 @@
-module github.com/georgechieng-sc/interns-2022
+module github.com/Jonah-G/sc-take-home-assessment-take-home-2025
 
 go 1.23
 
