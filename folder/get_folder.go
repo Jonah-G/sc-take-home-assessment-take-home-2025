@@ -19,13 +19,14 @@ func (f *driver) GetFoldersByOrgID(orgID uuid.UUID) []Folder {
 	}
 
 	return res
-
 }
 
 func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, error) {
 	folders := f.folders
 	var parent *Folder
 	correctOrg := true
+
+	// find parent folder, check organisation
 	for _, f := range folders {
 		if strings.HasSuffix(f.Paths, name) {
 			if f.OrgId == orgID {
@@ -37,6 +38,7 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 		}
 	}
 
+	// error handling
 	if parent == nil {
 		if !correctOrg {
 			return nil, errors.New("Error: Folder does not exist in the specified organization")
@@ -44,11 +46,13 @@ func (f *driver) GetAllChildFolders(orgID uuid.UUID, name string) ([]Folder, err
 		return nil, errors.New("Error: Folder does not exist")
 	}
 
+	// find child folders
 	var children []Folder
 	for _, f := range folders {
 		if strings.Contains(f.Paths, parent.Paths+".") {
 			children = append(children, f)
 		}
 	}
+
 	return children, nil
 }
